@@ -1,15 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light" data-accent="gold" data-surface="warm">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>QR Code Generator</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@400;700&family=Roboto+Mono:wght@400;700&family=Pacifico&display=swap">
+<script>try{var s=JSON.parse(localStorage.getItem('qr-theme2')||'null'),r=document.documentElement;if(s&&s.mode&&s.acc){s.mode==='auto'?r.removeAttribute('data-theme'):r.setAttribute('data-theme',s.mode);s.acc==='teal'?r.removeAttribute('data-accent'):r.setAttribute('data-accent',s.acc);(s.surf||'mint')==='mint'?r.removeAttribute('data-surface'):r.setAttribute('data-surface',s.surf)}}catch(e){}</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <style>
 :root{--bg:#f4f6f5;--panel:#fff;--ink:#14231f;--mute:#5d6b66;--line:#d5ddd9;--accent:#0f6b5c;--accent-ink:#fff;--warn:#9a5b00;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101715;--panel:#18211e;--ink:#e8efec;--mute:#93a39d;--line:#2c3935;--accent:#4fc3ab;--accent-ink:#06211b;--warn:#e0a84a}}
 :root[data-theme="dark"]{--bg:#101715;--panel:#18211e;--ink:#e8efec;--mute:#93a39d;--line:#2c3935;--accent:#4fc3ab;--accent-ink:#06211b;--warn:#e0a84a}
+:root[data-accent=indigo]{--accent:#4338ca;--accent-ink:#fff}
+:root[data-accent=maroon]{--accent:#8c1c2b;--accent-ink:#fff}
+:root[data-accent=slate]{--accent:#334e68;--accent-ink:#fff}
+@media (prefers-color-scheme:dark){
+:root:not([data-theme=light])[data-accent=indigo]{--accent:#a5b4fc;--accent-ink:#1e1b4b}
+:root:not([data-theme=light])[data-accent=maroon]{--accent:#f0a0aa;--accent-ink:#3a0a10}
+:root:not([data-theme=light])[data-accent=slate]{--accent:#9fb3c8;--accent-ink:#0f1c2a}}
+:root[data-theme=dark][data-accent=indigo]{--accent:#a5b4fc;--accent-ink:#1e1b4b}
+:root[data-theme=dark][data-accent=maroon]{--accent:#f0a0aa;--accent-ink:#3a0a10}
+:root[data-theme=dark][data-accent=slate]{--accent:#9fb3c8;--accent-ink:#0f1c2a}
+:root[data-accent=blue]{--accent:#1d4ed8;--accent-ink:#fff}
+:root[data-accent=green]{--accent:#2e7d32;--accent-ink:#fff}
+:root[data-accent=violet]{--accent:#7c3aed;--accent-ink:#fff}
+:root[data-accent=rose]{--accent:#be185d;--accent-ink:#fff}
+:root[data-accent=orange]{--accent:#c2410c;--accent-ink:#fff}
+:root[data-accent=gold]{--accent:#a16207;--accent-ink:#fff}
+:root[data-surface=neutral]{--bg:#f3f3f3;--panel:#fff;--line:#d9d9d9}
+:root[data-surface=warm]{--bg:#f7f3ec;--panel:#fffdf9;--line:#e0d8c8}
+:root[data-surface=cool]{--bg:#eef2f8;--panel:#fff;--line:#d0d9e8}
+@media (prefers-color-scheme:dark){
+:root:not([data-theme=light])[data-accent=blue]{--accent:#93c5fd;--accent-ink:#0b1f4d}
+:root:not([data-theme=light])[data-accent=green]{--accent:#86d08a;--accent-ink:#0d2a10}
+:root:not([data-theme=light])[data-accent=violet]{--accent:#c4b5fd;--accent-ink:#2a1065}
+:root:not([data-theme=light])[data-accent=rose]{--accent:#f9a8d4;--accent-ink:#4a0a28}
+:root:not([data-theme=light])[data-accent=orange]{--accent:#fdba74;--accent-ink:#431407}
+:root:not([data-theme=light])[data-accent=gold]{--accent:#fcd34d;--accent-ink:#422006}
+:root:not([data-theme=light])[data-surface=neutral]{--bg:#141414;--panel:#1e1e1e;--line:#333}
+:root:not([data-theme=light])[data-surface=warm]{--bg:#1a1714;--panel:#231f1b;--line:#3a332b}
+:root:not([data-theme=light])[data-surface=cool]{--bg:#0f1520;--panel:#172030;--line:#2a3850}}
+:root[data-theme=dark][data-accent=blue]{--accent:#93c5fd;--accent-ink:#0b1f4d}
+:root[data-theme=dark][data-accent=green]{--accent:#86d08a;--accent-ink:#0d2a10}
+:root[data-theme=dark][data-accent=violet]{--accent:#c4b5fd;--accent-ink:#2a1065}
+:root[data-theme=dark][data-accent=rose]{--accent:#f9a8d4;--accent-ink:#4a0a28}
+:root[data-theme=dark][data-accent=orange]{--accent:#fdba74;--accent-ink:#431407}
+:root[data-theme=dark][data-accent=gold]{--accent:#fcd34d;--accent-ink:#422006}
+:root[data-theme=dark][data-surface=neutral]{--bg:#141414;--panel:#1e1e1e;--line:#333}
+:root[data-theme=dark][data-surface=warm]{--bg:#1a1714;--panel:#231f1b;--line:#3a332b}
+:root[data-theme=dark][data-surface=cool]{--bg:#0f1520;--panel:#172030;--line:#2a3850}
+.lopt[hidden]{display:none}
+.row:has(#fg),.row:has(#lcol){grid-template-columns:140px 1fr}
+.themebtn{margin:0 0 12px;padding:4px 12px;font-size:.8125rem;font-weight:500;color:var(--mute);border-radius:999px}
+.theme{display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin:0 0 16px;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+.theme[hidden]{display:none}
+.sliders{display:flex;flex-direction:column;gap:8px}
+.int{display:flex;align-items:center;gap:8px;margin:0;font-weight:500;font-size:.875rem}
+.int input{width:140px}
+.int span{color:var(--mute);min-width:3.2em;font-variant-numeric:tabular-nums}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:0;border-radius:0;background:var(--panel);padding:6px 14px;font-weight:500}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
+.sw{display:flex;gap:10px}
+.sw button{width:28px;height:28px;border-radius:50%;padding:0;background:var(--c);border:2px solid var(--panel);box-shadow:0 0 0 1px var(--line)}
+.sw button[aria-pressed=true]{box-shadow:0 0 0 2px var(--ink)}
 *{box-sizing:border-box}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
@@ -44,17 +99,26 @@ canvas{max-width:100%;height:auto;display:block;image-rendering:pixelated}
 <main>
 <h1>QR code generator</h1>
 <p class="sub">Set the content, colors and size, then download a PNG. Everything runs in your browser.</p>
+<button type="button" id="themeBtn" class="themebtn" aria-expanded="false" aria-controls="themePanel">Color scheme</button>
+<div class="theme" id="themePanel" role="group" aria-label="Interface color scheme" hidden>
+ <div class="seg" id="mode" role="group" aria-label="Mode"><button type="button" data-mode="auto">Auto</button><button type="button" data-mode="light">Light</button><button type="button" data-mode="dark">Dark</button></div>
+ <div class="sw" id="accents" role="group" aria-label="Accent color"><button type="button" data-accent="teal" style="--c:#0f6b5c" aria-label="Teal" title="Teal"></button><button type="button" data-accent="indigo" style="--c:#4338ca" aria-label="Indigo" title="Indigo"></button><button type="button" data-accent="maroon" style="--c:#8c1c2b" aria-label="Maroon" title="Maroon"></button><button type="button" data-accent="slate" style="--c:#334e68" aria-label="Slate" title="Slate"></button><button type="button" data-accent="blue" style="--c:#1d4ed8" aria-label="Blue" title="Blue"></button><button type="button" data-accent="green" style="--c:#2e7d32" aria-label="Green" title="Green"></button><button type="button" data-accent="violet" style="--c:#7c3aed" aria-label="Violet" title="Violet"></button><button type="button" data-accent="rose" style="--c:#be185d" aria-label="Rose" title="Rose"></button><button type="button" data-accent="orange" style="--c:#c2410c" aria-label="Orange" title="Orange"></button><button type="button" data-accent="gold" style="--c:#a16207" aria-label="Gold" title="Gold"></button></div>
+ <div class="sliders"><label class="int" for="intens">Saturation <input type="range" id="intens" min="0" max="150" step="5" value="100"><span id="intV">100%</span></label>
+ <label class="int" for="bri">Brightness <input type="range" id="bri" min="60" max="140" step="5" value="100"><span id="briV">100%</span></label>
+ <label class="int" for="con" title="Brightness of the cards">Contrast <input type="range" id="con" min="60" max="140" step="5" value="100"><span id="conV">100%</span></label></div>
+ <div class="seg" id="surface" role="group" aria-label="Surface tone"><button type="button" data-surf="mint">Mint</button><button type="button" data-surf="neutral">Neutral</button><button type="button" data-surf="warm">Warm</button><button type="button" data-surf="cool">Cool</button></div>
+</div>
 <div class="grid">
  <section class="card" aria-label="Settings">
   <label for="txt">Content (URL or text)</label>
   <textarea id="txt" spellcheck="false">https://www.su.edu.ph</textarea>
 
   <div class="row">
-   <div><label for="fg">Code color</label><input type="color" id="fg" value="#14231f"></div>
-   <div><label for="bg">Background color</label><input type="color" id="bgc" value="#ffffff"></div>
-   <div class="full" id="contrast" style="display:none"><p class="hint warn" style="margin:0">Low contrast between code and background. Many scanners need a dark code on a light background.</p></div>
-   <div class="full"><label for="size">Size <span class="val" id="sizeV">512 px</span></label><input type="range" id="size" min="128" max="1500" step="16" value="512"></div>
-   <div class="full"><label for="margin">Quiet zone <span class="val" id="marginV">4 modules</span></label><input type="range" id="margin" min="0" max="10" value="4"></div>
+   <div style="grid-area:1/1"><label for="fg">Code color</label><input type="color" id="fg" value="#14231f" style="width:96px;display:block"></div>
+   <div style="grid-area:2/1"><label for="bgc">Background color</label><input type="color" id="bgc" value="#ffffff" style="width:96px;display:block"></div>
+   <div class="full" id="contrast" style="display:none;grid-row:3"><p class="hint warn" style="margin:0">Low contrast between code and background. Many scanners need a dark code on a light background.</p></div>
+   <div style="grid-area:1/2"><label for="size">Size <span class="val" id="sizeV">512 px</span></label><input type="range" id="size" min="128" max="1500" step="16" value="512"></div>
+   <div style="grid-area:2/2"><label for="margin">Quiet zone <span class="val" id="marginV">4 modules</span></label><input type="range" id="margin" min="0" max="10" value="4"></div>
    <div class="full"><label for="ec">Error correction</label>
     <select id="ec"><option value="L">Low (7%)</option><option value="M" selected>Medium (15%)</option><option value="Q">Quartile (25%)</option><option value="H">High (30%)</option></select>
     <p class="hint" id="ecHint"></p></div>
@@ -63,11 +127,16 @@ canvas{max-width:100%;height:auto;display:block;image-rendering:pixelated}
   <div class="row">
    <div class="full"><label for="lab">Label under the code (optional)</label>
     <textarea id="lab" spellcheck="false" style="min-height:56px" placeholder="e.g. Scan to register"></textarea>
-    <p class="hint">Long text wraps automatically. Press Enter for a new line.</p></div>
-   <div><label for="lfs">Label size <span class="val" id="lfsV">6%</span></label><input type="range" id="lfs" min="3" max="12" value="6"></div>
-   <div><label for="lcol">Label color</label><input type="color" id="lcol" value="#14231f"></div>
-   <div class="full"><label class="check"><input type="checkbox" id="lsame" checked> Use the code color for the label</label>
-    <label class="check" style="margin-top:8px"><input type="checkbox" id="lbold" checked> Bold</label></div>
+    <p class="hint">Long text wraps automatically. Press Enter for a new line.</p>
+    
+    <button type="button" id="lstyleBtn" class="themebtn" style="margin:10px 0 0" aria-expanded="false">Label style</button>
+    <label class="check lopt" hidden style="margin-top:10px"><input type="checkbox" id="lbold" checked> Bold</label></div>
+   <div class="full lopt" hidden style="grid-row:3"><label for="lfont">Label font</label>
+    <select id="lfont"><option value="sans">Default sans</option><option value="arial">Arial</option><option value="verdana">Verdana</option><option value="trebuchet">Trebuchet MS</option><option value="georgia">Georgia</option><option value="times">Times New Roman</option><option value="mono">Courier New</option><option value="impact">Impact</option><optgroup label="Web fonts"><option value="montserrat">Montserrat</option><option value="playfair">Playfair Display</option><option value="robotomono">Roboto Mono</option><option value="pacifico">Pacifico (script)</option></optgroup></select>
+    <p class="hint">Fonts like Arial or Impact depend on your device. The PNG uses whatever your browser draws.</p></div>
+   <div class="lopt" hidden style="grid-area:2/2"><label for="lfs">Label size <span class="val" id="lfsV">6%</span></label><input type="range" id="lfs" min="3" max="12" value="6"></div>
+   <div class="lopt" hidden style="grid-area:2/1"><label for="lcol">Label color</label><input type="color" id="lcol" value="#14231f" style="width:96px;display:block"><p class="hint">Follows the code color until you pick one.</p></div>
+   
   </div>
 
   <div class="row">
@@ -94,8 +163,9 @@ canvas{max-width:100%;height:auto;display:block;image-rendering:pixelated}
 <script>
 (function(){
   var $=function(id){return document.getElementById(id)};
-  var cv=$('cv'),ctx=cv.getContext('2d'),logoImg=null,timer=null;
+  var cv=$('cv'),ctx=cv.getContext('2d'),logoImg=null,timer=null,lcolTouched=false;
 
+  var FONTS={sans:'"Segoe UI",system-ui,-apple-system,Roboto,sans-serif',arial:'Arial,Helvetica,sans-serif',verdana:'Verdana,Geneva,sans-serif',trebuchet:'"Trebuchet MS",Helvetica,sans-serif',georgia:'Georgia,"Times New Roman",serif',times:'"Times New Roman",Times,serif',mono:'"Courier New",Courier,monospace',impact:'Impact,"Arial Narrow",sans-serif',montserrat:'"Montserrat",sans-serif',playfair:'"Playfair Display",serif',robotomono:'"Roboto Mono",monospace',pacifico:'"Pacifico",cursive'};
   function lum(hex){var c=[1,3,5].map(function(i){var v=parseInt(hex.substr(i,2),16)/255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*c[0]+.7152*c[1]+.0722*c[2]}
   function ratio(a,b){var x=lum(a),y=lum(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)}
   function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
@@ -107,7 +177,7 @@ canvas{max-width:100%;height:auto;display:block;image-rendering:pixelated}
     $('marginV').textContent=m+' modules';
     $('lsizeV').textContent=$('lsize').value+'%';
     $('lfsV').textContent=$('lfs').value+'% of width';
-    $('lcol').disabled=$('lsame').checked;
+    if(!lcolTouched)$('lcol').value=fg;
     $('contrast').style.display=ratio(fg,bg)<3?'':'none';
     $('logoOpts').hidden=!hasLogo;$('clearLogo').hidden=!hasLogo;
     var eff=ec;
@@ -121,7 +191,7 @@ canvas{max-width:100%;height:auto;display:block;image-rendering:pixelated}
     var n=qr.getModuleCount(),total=n+2*m,cell=size/total;
     cv.width=size;cv.height=size;
     var lab=$('lab').value.replace(/\s+$/,''),lines=[],fs=Math.round(size*(+$('lfs').value)/100),lh=Math.round(fs*1.3),gap=Math.round(fs*.4),labH=0;
-    function setFont(){ctx.font=($('lbold').checked?'700 ':'400 ')+fs+'px "Segoe UI",system-ui,-apple-system,Roboto,sans-serif'}
+    function setFont(){ctx.font=($('lbold').checked?'700 ':'400 ')+fs+'px '+(FONTS[$('lfont').value]||FONTS.sans)}
     if(lab){
       setFont();
       lab.split('\n').forEach(function(par){var cur='';par.split(' ').forEach(function(w){var t=cur?cur+' '+w:w;if(cur&&ctx.measureText(t).width>size-2*gap){lines.push(cur);cur=w}else{cur=t}});lines.push(cur)});
@@ -150,14 +220,30 @@ canvas{max-width:100%;height:auto;display:block;image-rendering:pixelated}
       lw2.textContent=area>limit?'This logo covers about '+Math.round(area)+'% of the code, which is more than '+eff+' correction usually tolerates. Shrink it or switch to High, and test with a phone before printing.':'Covers about '+Math.round(area)+'% of the code. Test with a phone before printing.';
     }
     if(labH){
-      setFont();ctx.fillStyle=$('lsame').checked?fg:$('lcol').value;ctx.textAlign='center';ctx.textBaseline='middle';
+      setFont();ctx.fillStyle=$('lcol').value;ctx.textAlign='center';ctx.textBaseline='middle';
       lines.forEach(function(l,i){ctx.fillText(l,size/2,size+gap+i*lh+lh/2)});
     }
     $('meta').textContent=size+' × '+(size+labH)+' px · '+n+' × '+n+' modules · level '+eff;
   }
   function queue(){clearTimeout(timer);timer=setTimeout(render,60)}
 
-  ['txt','fg','bgc','size','margin','ec','lsize','pad','round','lab','lfs','lcol','lsame','lbold'].forEach(function(id){$(id).addEventListener('input',queue);$(id).addEventListener('change',queue)});
+  ['txt','fg','bgc','size','margin','ec','lsize','pad','round','lab','lfs','lcol','lbold','lfont'].forEach(function(id){$(id).addEventListener('input',queue);$(id).addEventListener('change',queue)});
+
+  var lBtn=$('lstyleBtn'),lOpts=document.querySelectorAll('.lopt'),lOpenT=null,lCloseT=null,lPinned=false,lDrag=false;
+  function lIsOpen(){return !lOpts[0].hidden}
+  function lOpen(pin){clearTimeout(lOpenT);clearTimeout(lCloseT);lOpts.forEach(function(e){e.hidden=false});lBtn.setAttribute('aria-expanded','true');if(pin)lPinned=true}
+  function lClose(){clearTimeout(lOpenT);clearTimeout(lCloseT);lOpts.forEach(function(e){e.hidden=true});lBtn.setAttribute('aria-expanded','false');lPinned=false}
+  function lSched(){clearTimeout(lCloseT);if(lPinned)return;lCloseT=setTimeout(function(){var ae=document.activeElement;if(lDrag||lBtn.matches(':hover')||document.querySelector('.lopt:hover')||document.querySelector('.lopt :focus-visible'))return;if(ae&&ae.closest&&ae.closest('.lopt')&&(ae.tagName==='SELECT'||ae.type==='color'))return;lClose()},1200)}
+  lBtn.addEventListener('mouseenter',function(){clearTimeout(lCloseT);if(!lIsOpen()){clearTimeout(lOpenT);lOpenT=setTimeout(function(){lOpen(false)},300)}});
+  lBtn.addEventListener('mouseleave',function(){clearTimeout(lOpenT);lSched()});
+  lOpts.forEach(function(e){e.addEventListener('mouseenter',function(){clearTimeout(lCloseT)});e.addEventListener('mouseleave',lSched);e.addEventListener('pointerdown',function(){lDrag=true})});
+  document.addEventListener('pointerup',function(){if(lDrag){lDrag=false;lSched()}});
+  lBtn.addEventListener('click',function(){if(!lIsOpen()||!lPinned){lOpen(true)}else{lClose()}});
+  document.addEventListener('click',function(e){if(lIsOpen()&&e.target!==lBtn&&!e.target.closest('.lopt'))lClose()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&lIsOpen()){lClose();lBtn.focus()}});
+  function loadFont(){var f=$('lfont').value;if(!/^(montserrat|playfair|robotomono|pacifico)$/.test(f))return;var fam=FONTS[f].split(',')[0];try{Promise.all([document.fonts.load('400 20px '+fam),document.fonts.load('700 20px '+fam)]).then(queue)}catch(e){}}
+  $('lfont').addEventListener('change',loadFont);$('lbold').addEventListener('change',loadFont);
+  $('lcol').addEventListener('input',function(){lcolTouched=true});
 
   $('logo').addEventListener('change',function(e){
     var f=e.target.files&&e.target.files[0];if(!f)return;
@@ -166,6 +252,57 @@ canvas{max-width:100%;height:auto;display:block;image-rendering:pixelated}
     rd.readAsDataURL(f);
   });
   $('clearLogo').addEventListener('click',function(){logoImg=null;$('logo').value='';render()});
+
+  var root=document.documentElement,modeBtns=document.querySelectorAll('#mode button'),accBtns=document.querySelectorAll('#accents button');
+  var theme={mode:'light',acc:'gold',surf:'warm',int:100,bri:100,con:100};
+  try{var sv=JSON.parse(localStorage.getItem('qr-theme2')||'null');if(sv&&sv.mode&&sv.acc){theme=sv;theme.surf=sv.surf||'mint';theme.int=typeof sv.int==='number'?sv.int:100;theme.bri=typeof sv.bri==='number'?sv.bri:100;theme.con=typeof sv.con==='number'?sv.con:100}}catch(e){}
+  var IV=['--accent','--bg','--panel','--line'];
+  function h2r(h){h=h.replace('#','');if(h.length===3)h=h.split('').map(function(c){return c+c}).join('');return [0,2,4].map(function(i){return parseInt(h.substr(i,2),16)/255})}
+  function r2h(r,g,b){return '#'+[r,g,b].map(function(v){return ('0'+Math.round(Math.max(0,Math.min(1,v))*255).toString(16)).slice(-2)}).join('')}
+  function toHsl(c){var r=c[0],g=c[1],b=c[2],mx=Math.max(r,g,b),mn=Math.min(r,g,b),l=(mx+mn)/2,s=0,h=0,d=mx-mn;if(d){s=d/(1-Math.abs(2*l-1));if(mx===r)h=((g-b)/d)%6;else if(mx===g)h=(b-r)/d+2;else h=(r-g)/d+4;h*=60;if(h<0)h+=360}return [h,s,l]}
+  function fromHsl(h,s,l){var c=(1-Math.abs(2*l-1))*s,x=c*(1-Math.abs((h/60)%2-1)),m=l-c/2,r=0,g=0,b=0;if(h<60){r=c;g=x}else if(h<120){r=x;g=c}else if(h<180){g=c;b=x}else if(h<240){g=x;b=c}else if(h<300){r=x;b=c}else{r=c;b=x}return r2h(r+m,g+m,b+m)}
+  function applyIntensity(){
+    $('intens').value=theme.int;$('intV').textContent=theme.int+'%';$('bri').value=theme.bri;$('briV').textContent=theme.bri+'%';$('con').value=theme.con;$('conV').textContent=theme.con+'%';
+    IV.forEach(function(v){root.style.removeProperty(v)});
+    var k=theme.int/100,db=((theme.bri===undefined?100:theme.bri)-100)/100*0.5,dc=((theme.con===undefined?100:theme.con)-100)/100*0.5;if(k===1&&db===0&&dc===0)return;
+    var cs=getComputedStyle(root);
+    IV.forEach(function(v){var raw=cs.getPropertyValue(v).trim();if(!/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(raw))return;var c=toHsl(h2r(raw));var sf=v!=='--accent';root.style.setProperty(v,fromHsl(c[0],Math.min(1,c[1]*k),sf?Math.max(0,Math.min(1,c[2]+db+(v==='--panel'?dc:0))):c[2]))});
+  }
+  function applyTheme(save){
+    if(theme.mode==='auto')root.removeAttribute('data-theme');else root.setAttribute('data-theme',theme.mode);
+    if(theme.acc==='teal')root.removeAttribute('data-accent');else root.setAttribute('data-accent',theme.acc);
+    modeBtns.forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.mode===theme.mode))});
+    accBtns.forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.accent===theme.acc))});
+    if(theme.surf==='mint')root.removeAttribute('data-surface');else root.setAttribute('data-surface',theme.surf);
+    document.querySelectorAll('#surface button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.surf===theme.surf))});
+    applyIntensity();
+    if(save){try{localStorage.setItem('qr-theme2',JSON.stringify(theme))}catch(e){}}
+  }
+  modeBtns.forEach(function(b){b.addEventListener('click',function(){theme.mode=b.dataset.mode;applyTheme(true)})});
+  accBtns.forEach(function(b){b.addEventListener('click',function(){theme.acc=b.dataset.accent;applyTheme(true)})});
+  document.querySelectorAll('#surface button').forEach(function(b){b.addEventListener('click',function(){theme.surf=b.dataset.surf;applyTheme(true)})});
+  $('intens').addEventListener('input',function(){theme.int=+this.value;applyTheme(true)});
+  $('bri').addEventListener('input',function(){theme.bri=+this.value;applyTheme(true)});
+  $('con').addEventListener('input',function(){theme.con=+this.value;applyTheme(true)});
+  try{window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(){applyTheme(false)})}catch(e){}
+  var tBtn=$('themeBtn'),tPan=$('themePanel'),tOpenT=null,tCloseT=null,tPinned=false,tDrag=false;
+  function tShow(pin){clearTimeout(tOpenT);clearTimeout(tCloseT);tPan.hidden=false;tBtn.setAttribute('aria-expanded','true');if(pin)tPinned=true}
+  function tHide(){clearTimeout(tOpenT);clearTimeout(tCloseT);tPan.hidden=true;tBtn.setAttribute('aria-expanded','false');tPinned=false}
+  function tSched(){clearTimeout(tCloseT);if(tPinned)return;tCloseT=setTimeout(function(){if(tDrag||tPan.matches(':hover')||tBtn.matches(':hover')||tPan.querySelector(':focus-visible'))return;tHide()},1200)}
+  tBtn.addEventListener('mouseenter',function(){clearTimeout(tCloseT);if(tPan.hidden){clearTimeout(tOpenT);tOpenT=setTimeout(function(){tShow(false)},1000)}});
+  tBtn.addEventListener('mouseleave',function(){clearTimeout(tOpenT);tSched()});
+  tPan.addEventListener('mouseenter',function(){clearTimeout(tCloseT)});
+  tPan.addEventListener('mouseleave',tSched);
+  tPan.addEventListener('pointerdown',function(){tDrag=true});
+  document.addEventListener('pointerup',function(){if(tDrag){tDrag=false;tSched()}});
+  tBtn.addEventListener('click',function(){if(tPan.hidden||!tPinned){tShow(true)}else{tHide()}});
+  document.addEventListener('click',function(e){if(!tPan.hidden&&!tPan.contains(e.target)&&e.target!==tBtn)tHide()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!tPan.hidden){tHide();tBtn.focus()}});
+  applyTheme(false);
+  try{new MutationObserver(function(){var bad=(theme.mode!=='auto'&&root.getAttribute('data-theme')!==theme.mode)||(root.getAttribute('data-accent')||'teal')!==theme.acc||(root.getAttribute('data-surface')||'mint')!==theme.surf;if(bad)applyTheme(false)}).observe(root,{attributes:true,attributeFilter:['data-theme','data-accent','data-surface']})}catch(e){}
+  document.addEventListener('DOMContentLoaded',function(){applyTheme(false)});
+  window.addEventListener('load',function(){applyTheme(false)});
+  window.addEventListener('pageshow',function(){applyTheme(false)});
 
   $('dl').addEventListener('click',function(){
     cv.toBlob(function(b){
