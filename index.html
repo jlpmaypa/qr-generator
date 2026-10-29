@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QR Code Generator</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<style>
+:root{--bg:#f4f6f5;--panel:#fff;--ink:#14231f;--mute:#5d6b66;--line:#d5ddd9;--accent:#0f6b5c;--accent-ink:#fff;--warn:#9a5b00;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101715;--panel:#18211e;--ink:#e8efec;--mute:#93a39d;--line:#2c3935;--accent:#4fc3ab;--accent-ink:#06211b;--warn:#e0a84a}}
+:root[data-theme="dark"]{--bg:#101715;--panel:#18211e;--ink:#e8efec;--mute:#93a39d;--line:#2c3935;--accent:#4fc3ab;--accent-ink:#06211b;--warn:#e0a84a}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
+main{max-width:980px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.5rem;margin:0 0 4px;letter-spacing:-.01em}
+.sub{color:var(--mute);margin:0 0 20px}
+.grid{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:820px){.grid{grid-template-columns:1fr 360px;align-items:start}.preview{position:sticky;top:16px}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+.row{display:grid;gap:12px;grid-template-columns:1fr 1fr;margin-top:14px}
+label{display:block;font-size:.875rem;font-weight:600;margin-bottom:6px}
+textarea,input[type=text],select{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px}
+textarea{min-height:84px;resize:vertical}
+input[type=color]{width:100%;height:42px;border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:3px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.val{float:right;color:var(--mute);font-weight:400;font-variant-numeric:tabular-nums}
+.full{grid-column:1/-1}
+.hint{font-size:.8125rem;color:var(--mute);margin:6px 0 0}
+.warn{color:var(--warn)}
+.check{display:flex;gap:8px;align-items:center;font-weight:400;margin:0}
+button,.btn{font:inherit;font-weight:600;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:10px 14px;cursor:pointer}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);width:100%}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.stage{display:flex;justify-content:center;padding:12px;border-radius:8px;background:repeating-conic-gradient(var(--line) 0 25%,transparent 0 50%) 0 0/16px 16px}
+canvas{max-width:100%;height:auto;display:block;image-rendering:pixelated}
+.actions{display:grid;gap:8px;margin-top:12px}
+.logorow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.meta{font-size:.8125rem;color:var(--mute);margin-top:8px;text-align:center}
+</style>
+</head>
+<body>
+<main>
+<h1>QR code generator</h1>
+<p class="sub">Set the content, colors and size, then download a PNG. Everything runs in your browser.</p>
+<div class="grid">
+ <section class="card" aria-label="Settings">
+  <label for="txt">Content (URL or text)</label>
+  <textarea id="txt" spellcheck="false">https://www.su.edu.ph</textarea>
+
+  <div class="row">
+   <div><label for="fg">Code color</label><input type="color" id="fg" value="#14231f"></div>
+   <div><label for="bg">Background color</label><input type="color" id="bgc" value="#ffffff"></div>
+   <div class="full" id="contrast" style="display:none"><p class="hint warn" style="margin:0">Low contrast between code and background. Many scanners need a dark code on a light background.</p></div>
+   <div class="full"><label for="size">Size <span class="val" id="sizeV">512 px</span></label><input type="range" id="size" min="128" max="1500" step="16" value="512"></div>
+   <div class="full"><label for="margin">Quiet zone <span class="val" id="marginV">4 modules</span></label><input type="range" id="margin" min="0" max="10" value="4"></div>
+   <div class="full"><label for="ec">Error correction</label>
+    <select id="ec"><option value="L">Low (7%)</option><option value="M" selected>Medium (15%)</option><option value="Q">Quartile (25%)</option><option value="H">High (30%)</option></select>
+    <p class="hint" id="ecHint"></p></div>
+  </div>
+
+  <div class="row">
+   <div class="full"><label for="lab">Label under the code (optional)</label>
+    <textarea id="lab" spellcheck="false" style="min-height:56px" placeholder="e.g. Scan to register"></textarea>
+    <p class="hint">Long text wraps automatically. Press Enter for a new line.</p></div>
+   <div><label for="lfs">Label size <span class="val" id="lfsV">6%</span></label><input type="range" id="lfs" min="3" max="12" value="6"></div>
+   <div><label for="lcol">Label color</label><input type="color" id="lcol" value="#14231f"></div>
+   <div class="full"><label class="check"><input type="checkbox" id="lsame" checked> Use the code color for the label</label>
+    <label class="check" style="margin-top:8px"><input type="checkbox" id="lbold" checked> Bold</label></div>
+  </div>
+
+  <div class="row">
+   <div class="full"><label for="logo">Logo in the middle (optional)</label>
+    <div class="logorow"><input type="file" id="logo" accept="image/png,image/jpeg,image/svg+xml,image/webp"><button type="button" id="clearLogo" hidden>Remove logo</button></div></div>
+   <div class="full" id="logoOpts" hidden>
+    <label for="lsize">Logo size <span class="val" id="lsizeV">20%</span></label><input type="range" id="lsize" min="8" max="35" value="20">
+    <p class="hint" id="lwarn"></p>
+    <label class="check" style="margin-top:10px"><input type="checkbox" id="pad" checked> Clear a background pad behind the logo</label>
+    <label class="check" style="margin-top:8px"><input type="checkbox" id="round" checked> Rounded pad corners</label>
+   </div>
+  </div>
+ </section>
+
+ <aside class="card preview" aria-label="Preview">
+  <div class="stage"><canvas id="cv" width="512" height="512" role="img" aria-label="Generated QR code"></canvas></div>
+  <p class="meta" id="meta"></p>
+  <div class="actions"><button class="primary" id="dl" type="button">Download PNG</button></div>
+  <p class="hint" id="err" role="alert"></p>
+ </aside>
+</div>
+</main>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var cv=$('cv'),ctx=cv.getContext('2d'),logoImg=null,timer=null;
+
+  function lum(hex){var c=[1,3,5].map(function(i){var v=parseInt(hex.substr(i,2),16)/255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*c[0]+.7152*c[1]+.0722*c[2]}
+  function ratio(a,b){var x=lum(a),y=lum(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)}
+  function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
+
+  function render(){
+    var text=$('txt').value,size=+$('size').value,m=+$('margin').value,fg=$('fg').value,bg=$('bgc').value;
+    var hasLogo=!!logoImg,ec=$('ec').value;
+    $('sizeV').textContent=size+' px';
+    $('marginV').textContent=m+' modules';
+    $('lsizeV').textContent=$('lsize').value+'%';
+    $('lfsV').textContent=$('lfs').value+'% of width';
+    $('lcol').disabled=$('lsame').checked;
+    $('contrast').style.display=ratio(fg,bg)<3?'':'none';
+    $('logoOpts').hidden=!hasLogo;$('clearLogo').hidden=!hasLogo;
+    var eff=ec;
+    if(hasLogo&&ec!=='H'&&ec!=='Q'){eff='Q'}
+    $('ecHint').textContent=hasLogo&&eff!==ec?'A logo hides part of the code, so Quartile is used instead of the level you picked.':'Higher levels survive more damage or a logo, but make the code denser.';
+    $('err').textContent='';
+    if(!text){ctx.clearRect(0,0,cv.width,cv.height);$('meta').textContent='Enter some content to generate a code.';return}
+    var qr;
+    try{qr=qrcode(0,eff);qr.addData(text,'Byte');qr.make()}catch(e){
+      $('err').textContent='This content is too long for a QR code at this error-correction level. Shorten it or lower the level.';return}
+    var n=qr.getModuleCount(),total=n+2*m,cell=size/total;
+    cv.width=size;cv.height=size;
+    var lab=$('lab').value.replace(/\s+$/,''),lines=[],fs=Math.round(size*(+$('lfs').value)/100),lh=Math.round(fs*1.3),gap=Math.round(fs*.4),labH=0;
+    function setFont(){ctx.font=($('lbold').checked?'700 ':'400 ')+fs+'px "Segoe UI",system-ui,-apple-system,Roboto,sans-serif'}
+    if(lab){
+      setFont();
+      lab.split('\n').forEach(function(par){var cur='';par.split(' ').forEach(function(w){var t=cur?cur+' '+w:w;if(cur&&ctx.measureText(t).width>size-2*gap){lines.push(cur);cur=w}else{cur=t}});lines.push(cur)});
+      labH=gap+lines.length*lh+Math.round(fs*.5);
+    }
+    cv.height=size+labH;
+    ctx.fillStyle=bg;ctx.fillRect(0,0,size,size+labH);
+    ctx.fillStyle=fg;
+    for(var r=0;r<n;r++){for(var c=0;c<n;c++){
+      if(qr.isDark(r,c)){
+        var x0=Math.round((m+c)*cell),y0=Math.round((m+r)*cell),x1=Math.round((m+c+1)*cell),y1=Math.round((m+r+1)*cell);
+        ctx.fillRect(x0,y0,x1-x0,y1-y0);
+      }}}
+    var pct=+$('lsize').value/100,lw=size*pct,cx=size/2;
+    if(hasLogo){
+      var iw=logoImg.naturalWidth||logoImg.width,ih=logoImg.naturalHeight||logoImg.height,s=Math.min(lw/iw,lw/ih),w=iw*s,h=ih*s;
+      if($('pad').checked){
+        var p=lw*.1,bx=cx-w/2-p,by=cx-h/2-p;
+        ctx.fillStyle=bg;
+        if($('round').checked){rr(ctx,bx,by,w+2*p,h+2*p,Math.min(w,h)*.18);ctx.fill()}else{ctx.fillRect(bx,by,w+2*p,h+2*p)}
+      }
+      ctx.drawImage(logoImg,cx-w/2,cx-h/2,w,h);
+      var area=pct*pct*100,limit={Q:18,H:25}[eff]||10;
+      var lw2=$('lwarn');
+      lw2.className='hint'+(area>limit?' warn':'');
+      lw2.textContent=area>limit?'This logo covers about '+Math.round(area)+'% of the code, which is more than '+eff+' correction usually tolerates. Shrink it or switch to High, and test with a phone before printing.':'Covers about '+Math.round(area)+'% of the code. Test with a phone before printing.';
+    }
+    if(labH){
+      setFont();ctx.fillStyle=$('lsame').checked?fg:$('lcol').value;ctx.textAlign='center';ctx.textBaseline='middle';
+      lines.forEach(function(l,i){ctx.fillText(l,size/2,size+gap+i*lh+lh/2)});
+    }
+    $('meta').textContent=size+' × '+(size+labH)+' px · '+n+' × '+n+' modules · level '+eff;
+  }
+  function queue(){clearTimeout(timer);timer=setTimeout(render,60)}
+
+  ['txt','fg','bgc','size','margin','ec','lsize','pad','round','lab','lfs','lcol','lsame','lbold'].forEach(function(id){$(id).addEventListener('input',queue);$(id).addEventListener('change',queue)});
+
+  $('logo').addEventListener('change',function(e){
+    var f=e.target.files&&e.target.files[0];if(!f)return;
+    var rd=new FileReader();
+    rd.onload=function(){var im=new Image();im.onload=function(){logoImg=im;render()};im.onerror=function(){$('err').textContent='That image could not be read. Try a PNG, JPG, WebP or SVG file.'};im.src=rd.result};
+    rd.readAsDataURL(f);
+  });
+  $('clearLogo').addEventListener('click',function(){logoImg=null;$('logo').value='';render()});
+
+  $('dl').addEventListener('click',function(){
+    cv.toBlob(function(b){
+      if(!b)return;var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='qr-code.png';
+      document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},1000);
+    },'image/png');
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
